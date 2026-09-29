@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard - PocketSmart AI
+{% endblock %}
+
+{% block content %}
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <span class="badge">
+            USER DASHBOARD
+        </span>
+
+        <h1>
+            Your PocketSmart Dashboard
+        </h1>
+
+        <p id="dashboardWelcome">
+            Loading account information...
+        </p>
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+
+            <span>
+                Saved Recommendations
+            </span>
+
+            <strong id="historyCount">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <span>
+                Account
+            </span>
+
+            <strong id="userName">
+                Guest
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="section-heading history-title">
+
+        <h2>
+            Recommendation History
+        </h2>
+
+    </div>
+
+
+    <div id="historyContainer">
+
+        <div class="empty-state">
+            Loading history...
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+async function loadDashboard() {
+
+    const sessionResponse =
+        await fetch("/api/session-info");
+
+    const session =
+        await sessionResponse.json();
+
+    if (!session.authenticated) {
+
+        document.getElementById(
+            "dashboardWelcome"
+        ).innerHTML =
+            'Please <a href="/login">login</a> to view your dashboard.';
+
+        return;
+    }
+
+    document.getElementById(
+        "userName"
+    ).textContent =
+        session.user.name;
+
+    document.getElementById(
+        "dashboardWelcome"
+    ).textContent =
+        `Welcome, ${session.user.name}!`;
+
+
+    const response =
+        await fetch("/api/history");
+
+    const data =
+        await response.json();
+
+    document.getElementById(
+        "historyCount"
+    ).textContent =
+        data.items.length;
+
+
+    const container =
+        document.getElementById(
+            "historyContainer"
+        );
+
+    if (!data.items.length) {
+
+        container.innerHTML = `
+            <div class="empty-state">
+                <h3>No recommendations yet</h3>
+                <p>
+                    Start using one of the planners
+                    to create your first recommendation.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        data.items.map(item => {
+
+            const title =
+                item.result?.title ||
+                "Recommendation";
+
+            const summary =
+                item.result?.summary ||
+                "Saved recommendation";
+
+            return `
+                <article class="history-card">
+
+                    <div>
+
+                        <span class="badge">
+                            ${item.category}
+                        </span>
+
+                        <h3>
+                            ${title}
+                        </h3>
+
+                        <p>
+                            ${summary}
+                        </p>
+
+                    </div>
+
+                    <small>
+                        ${new Date(
+                            item.created_at
+                        ).toLocaleString()}
+                    </small>
+
+                </article>
+            `;
+
+        }).join("");
+}
+
+
+loadDashboard();
+
+</script>
+
+{% endblock %}

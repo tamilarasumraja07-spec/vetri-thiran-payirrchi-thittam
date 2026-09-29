@@ -1,0 +1,313 @@
+{% extends "base.html" %}
+
+{% block title %}
+Party Planner
+{% endblock %}
+
+{% block content %}
+
+<section class="planner-section">
+
+    <div class="section-heading">
+
+        <span class="badge">
+            PARTY PLANNER
+        </span>
+
+        <h1>
+            Plan your event budget
+        </h1>
+
+        <p>
+            Allocate your event budget intelligently.
+        </p>
+
+    </div>
+
+
+    <div class="planner-layout">
+
+        <form
+            id="partyForm"
+            class="planner-card"
+        >
+
+            <label>
+                Total Budget ₹
+            </label>
+
+            <input
+                type="number"
+                id="partyBudget"
+                min="1"
+                required
+            >
+
+
+            <label>
+                Number of Guests
+            </label>
+
+            <input
+                type="number"
+                id="partyGuests"
+                min="1"
+                required
+            >
+
+
+            <label>
+                Event Type
+            </label>
+
+            <select id="partyType">
+
+                <option>
+                    Birthday
+                </option>
+
+                <option>
+                    Wedding
+                </option>
+
+                <option>
+                    College Event
+                </option>
+
+                <option>
+                    Anniversary
+                </option>
+
+                <option>
+                    Family Function
+                </option>
+
+                <option>
+                    Corporate Event
+                </option>
+
+            </select>
+
+
+            <label>
+                Venue
+            </label>
+
+            <input
+                type="text"
+                id="partyVenue"
+                placeholder="Hall, outdoor, home..."
+                required
+            >
+
+
+            <label>
+                Food Preference
+            </label>
+
+            <select id="partyFood">
+
+                <option>
+                    Mixed
+                </option>
+
+                <option>
+                    Vegetarian
+                </option>
+
+                <option>
+                    Non-Vegetarian
+                </option>
+
+            </select>
+
+
+            <label>
+                Entertainment
+            </label>
+
+            <select id="partyEntertainment">
+
+                <option>
+                    Music
+                </option>
+
+                <option>
+                    DJ
+                </option>
+
+                <option>
+                    Games
+                </option>
+
+                <option>
+                    None
+                </option>
+
+            </select>
+
+
+            <label>
+                Additional Notes
+            </label>
+
+            <textarea
+                id="partyNotes"
+                rows="4"
+            ></textarea>
+
+
+            <button
+                type="submit"
+                class="btn primary full"
+            >
+                Generate Party Plan
+            </button>
+
+        </form>
+
+
+        <div
+            id="partyResult"
+            class="result-card"
+        >
+
+            <div class="empty-state">
+
+                <div class="icon">
+                    🎉
+                </div>
+
+                <h3>
+                    Your event plan will appear here
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+document
+.getElementById("partyForm")
+.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+        const result =
+            document.getElementById(
+                "partyResult"
+            );
+
+        result.innerHTML =
+            '<div class="loading">Creating your party plan...</div>';
+
+
+        const payload = {
+
+            budget:
+                Number(
+                    document.getElementById(
+                        "partyBudget"
+                    ).value
+                ),
+
+            guests:
+                Number(
+                    document.getElementById(
+                        "partyGuests"
+                    ).value
+                ),
+
+            event_type:
+                document.getElementById(
+                    "partyType"
+                ).value,
+
+            venue:
+                document.getElementById(
+                    "partyVenue"
+                ).value,
+
+            food_preference:
+                document.getElementById(
+                    "partyFood"
+                ).value,
+
+            entertainment:
+                document.getElementById(
+                    "partyEntertainment"
+                ).value,
+
+            notes:
+                document.getElementById(
+                    "partyNotes"
+                ).value
+        };
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/generate-party",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(
+                                payload
+                            )
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.detail ||
+                    "Unable to generate plan."
+                );
+            }
+
+
+            renderRecommendation(
+                result,
+                data
+            );
+
+        }
+
+        catch(error) {
+
+            result.innerHTML = `
+                <div class="error-box">
+                    ${error.message}
+                </div>
+            `;
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}

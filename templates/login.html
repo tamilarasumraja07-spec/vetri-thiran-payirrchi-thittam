@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}
+Login - PocketSmart AI
+{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+
+    <div class="auth-card">
+
+        <div class="section-heading">
+            <span class="badge">
+                ACCOUNT
+            </span>
+
+            <h1>
+                Welcome back
+            </h1>
+
+            <p>
+                Login to save and view your
+                recommendation history.
+            </p>
+        </div>
+
+
+        <form id="loginForm">
+
+            <label>
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="loginEmail"
+                placeholder="you@example.com"
+                required
+            >
+
+
+            <label>
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Enter password"
+                required
+            >
+
+
+            <button
+                type="submit"
+                class="btn primary full"
+            >
+                Login
+            </button>
+
+        </form>
+
+
+        <div
+            id="loginMessage"
+            class="message"
+        ></div>
+
+
+        <p class="auth-footer">
+            Don't have an account?
+            <a href="/register">
+                Register
+            </a>
+        </p>
+
+    </div>
+
+</section>
+
+{% endblock %}

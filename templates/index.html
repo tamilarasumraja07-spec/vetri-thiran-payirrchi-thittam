@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}
+PocketSmart AI - Smart Budget Assistant
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <span class="badge">
+            GENERATIVE AI BUDGET ASSISTANT
+        </span>
+
+        <h1>
+            Plan smarter.
+            <span>Spend better.</span>
+        </h1>
+
+        <p>
+            PocketSmart AI helps you create practical
+            budgets and recommendations for home interiors,
+            parties and jewelry.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a
+                href="/planner/home"
+                class="btn primary"
+            >
+                Start Planning
+            </a>
+
+            <a
+                href="/register"
+                class="btn secondary"
+            >
+                Create Account
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="section">
+
+    <div class="section-heading">
+
+        <span class="badge">
+            SMART PLANNERS
+        </span>
+
+        <h2>
+            Choose your planning category
+        </h2>
+
+        <p>
+            Enter your budget and requirements.
+            PocketSmart AI generates a structured plan.
+        </p>
+
+    </div>
+
+
+    <div class="card-grid">
+
+        <article class="feature-card">
+
+            <div class="icon">
+                🏠
+            </div>
+
+            <h3>
+                Home Interior
+            </h3>
+
+            <p>
+                Plan room improvements, furniture,
+                lighting, fans and décor according
+                to your budget.
+            </p>
+
+            <a href="/planner/home">
+                Open Planner →
+            </a>
+
+        </article>
+
+
+        <article class="feature-card">
+
+            <div class="icon">
+                🎉
+            </div>
+
+            <h3>
+                Party Planning
+            </h3>
+
+            <p>
+                Allocate your event budget across
+                catering, decoration, venue and
+                entertainment.
+            </p>
+
+            <a href="/planner/party">
+                Open Planner →
+            </a>
+
+        </article>
+
+
+        <article class="feature-card">
+
+            <div class="icon">
+                💎
+            </div>
+
+            <h3>
+                Jewelry
+            </h3>
+
+            <p>
+                Get jewelry suggestions based on
+                your budget, occasion, style and
+                optional outfit image.
+            </p>
+
+            <a href="/planner/jewelry">
+                Open Planner →
+            </a>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<section class="section highlight">
+
+    <div>
+
+        <span class="badge">
+            HOW IT WORKS
+        </span>
+
+        <h2>
+            From budget to recommendation
+        </h2>
+
+        <p>
+            PocketSmart AI combines structured budget
+            planning with Generative AI to create
+            useful recommendations.
+        </p>
+
+    </div>
+
+
+    <div class="steps">
+
+        <div class="step">
+            <strong>01</strong>
+            <span>Enter your requirements</span>
+        </div>
+
+        <div class="step">
+            <strong>02</strong>
+            <span>Set your budget</span>
+        </div>
+
+        <div class="step">
+            <strong>03</strong>
+            <span>AI analyzes your needs</span>
+        </div>
+
+        <div class="step">
+            <strong>04</strong>
+            <span>Receive your plan</span>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

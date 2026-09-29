@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+
+{% block title %}
+Jewelry Planner
+{% endblock %}
+
+{% block content %}
+
+<section class="planner-section">
+
+    <div class="section-heading">
+
+        <span class="badge">
+            JEWELRY ASSISTANT
+        </span>
+
+        <h1>
+            Find jewelry for your occasion
+        </h1>
+
+        <p>
+            Enter your budget and style.
+            You can optionally upload an outfit image
+            for multimodal AI analysis.
+        </p>
+
+    </div>
+
+
+    <div class="planner-layout">
+
+        <form
+            id="jewelryForm"
+            class="planner-card"
+            enctype="multipart/form-data"
+        >
+
+            <label>
+                Budget ₹
+            </label>
+
+            <input
+                type="number"
+                name="budget"
+                id="jewelryBudget"
+                min="1"
+                required
+            >
+
+
+            <label>
+                Occasion
+            </label>
+
+            <select
+                name="occasion"
+                id="jewelryOccasion"
+            >
+
+                <option>
+                    Wedding
+                </option>
+
+                <option>
+                    Party
+                </option>
+
+                <option>
+                    Festival
+                </option>
+
+                <option>
+                    Birthday
+                </option>
+
+                <option>
+                    Daily Wear
+                </option>
+
+                <option>
+                    Formal Event
+                </option>
+
+            </select>
+
+
+            <label>
+                Style
+            </label>
+
+            <select
+                name="style"
+                id="jewelryStyle"
+            >
+
+                <option>
+                    Traditional
+                </option>
+
+                <option>
+                    Modern
+                </option>
+
+                <option>
+                    Minimal
+                </option>
+
+                <option>
+                    Elegant
+                </option>
+
+                <option>
+                    Statement
+                </option>
+
+            </select>
+
+
+            <label>
+                Metal
+            </label>
+
+            <select
+                name="metal"
+                id="jewelryMetal"
+            >
+
+                <option>
+                    Any
+                </option>
+
+                <option>
+                    Gold
+                </option>
+
+                <option>
+                    Silver
+                </option>
+
+                <option>
+                    Rose Gold
+                </option>
+
+            </select>
+
+
+            <label>
+                Outfit Image
+            </label>
+
+            <input
+                type="file"
+                name="outfit_image"
+                accept="image/png,image/jpeg,image/webp"
+            >
+
+
+            <label>
+                Additional Notes
+            </label>
+
+            <textarea
+                name="notes"
+                id="jewelryNotes"
+                rows="4"
+                placeholder="Colour, neckline, preferences..."
+            ></textarea>
+
+
+            <button
+                type="submit"
+                class="btn primary full"
+            >
+                Generate Jewelry Plan
+            </button>
+
+        </form>
+
+
+        <div
+            id="jewelryResult"
+            class="result-card"
+        >
+
+            <div class="empty-state">
+
+                <div class="icon">
+                    💎
+                </div>
+
+                <h3>
+                    Your jewelry recommendations
+                    will appear here
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+document
+.getElementById("jewelryForm")
+.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+        const result =
+            document.getElementById(
+                "jewelryResult"
+            );
+
+        result.innerHTML =
+            '<div class="loading">Analyzing your jewelry preferences...</div>';
+
+
+        const formData =
+            new FormData(
+                this
+            );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/generate-jewelry",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+                throw new Error(
+                    data.detail ||
+                    "Unable to generate recommendation."
+                );
+            }
+
+
+            renderRecommendation(
+                result,
+                data
+            );
+
+        }
+
+        catch(error) {
+
+            result.innerHTML = `
+                <div class="error-box">
+                    ${error.message}
+                </div>
+            `;
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}
